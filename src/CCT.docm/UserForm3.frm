@@ -18,34 +18,58 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub CommandButton1_Click()
-    Dim txt As String
     Dim pos As Long
-    Dim startPos As Long, endPos As Long
+    Dim totalLen As Long
     Dim result As String
 
-    ' テキストボックス内の全テキスト
-    txt = TextBox1.Text
-    ' カーソルの位置
-    pos = TextBox1.SelStart
+    TextBox1.SetFocus
+    DoEvents
 
-    ' 前の改行の位置を探す（最初からカーソルの位置まで）
-    startPos = InStrRev(txt, vbCrLf, pos)
-    If startPos = 0 Then
-        startPos = 1
-    Else
-        startPos = startPos + 2 ' 改行の直後
-    End If
+    With TextBox1
+        pos = .SelStart
+        totalLen = Len(.text)
 
-    ' 次の改行の位置を探す（カーソル位置から後ろ）
-    endPos = InStr(pos + 1, txt, vbCrLf)
-    If endPos = 0 Then
-        endPos = Len(txt) + 1
-    End If
-
-    ' 該当行を抽出
-    result = Mid(txt, startPos, endPos - startPos)
-
-    MsgBox "現在の行のテキスト: " & vbCrLf & result
+        ' 選択されてないなら強制的に10文字選択
+        If .SelLength = 0 Then
+            If pos >= totalLen Then
+                MsgBox "カーソルが末尾にあります。", vbExclamation
+                Exit Sub
+            End If
+            
+            
+            Dim AfterPos As Long: AfterPos = pos
+            Dim PrePos As Long: PrePos = pos
+            Dim SelLen As Long: SelLen = 0
+            Do While SelLen < 300
+                DoEvents
+                .SelStart = PrePos
+                .SelLength = 1
+                If .SelText = vbCr And Not (SelLen = 0) Then
+                    AfterPos = PrePos + 1
+                    Do While SelLen < 600
+                        DoEvents
+                        .SelStart = AfterPos
+                        .SelLength = 1
+                        If .SelText = vbCr Then
+                            .SelStart = PrePos + 1
+                            .SelLength = AfterPos - PrePos - 1
+                            result = .SelText
+                            Exit Do
+                        End If
+                        AfterPos = AfterPos + 1
+                        SelLen = SelLen + 1
+                    Loop
+                    Exit Do
+                End If
+                
+                PrePos = PrePos - 1
+                SelLen = SelLen + 1
+            Loop
+            
+        Else
+            result = .SelText
+        End If
+    End With
     
     result = Replace(result, vbCr, "^p")
     
@@ -63,10 +87,8 @@ Private Sub CommandButton1_Click()
             rng.Select
             ' 画面に表示されるようスクロール
             ActiveWindow.ScrollIntoView rng, True
-
             Me.Hide
             UserForm4.CheckBox2.Value = False
-        
         Else
             MsgBox "文字列「" & result & "」は本文内に見つかりませんでした。", vbInformation
         End If
