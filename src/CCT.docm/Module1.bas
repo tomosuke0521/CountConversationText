@@ -19,7 +19,6 @@ Private Function GetWithoutLB(ByVal inp_text As String) As Long
     GetWithoutLB = Len(clean_text) - count_lb - count_tb
 End Function
 
-
 Private Sub ShowDetailResult(ByRef inp_text As String)
 
     Dim count_qm As Long: count_qm = UBound(Split(inp_text, "H"))
@@ -43,8 +42,6 @@ Private Sub ShowDetailResult(ByRef inp_text As String)
     On Error GoTo 0
 
 End Sub
-
-
 
 Sub CountCharactersInBrackets()
 
@@ -115,7 +112,6 @@ Sub CountCharactersInBrackets()
             "‘S‘Ì‚Ì•¶š”: " & all_text_count & vbCrLf & _
             "‰ï˜b•¶‚ÌŠ„‡: " & Format(Round(dialogue_count / all_text_count * 100, 2), "00.00") & "%" _
             , vbOKOnly, "ŒŸõŒ‹‰Ê"
-    
     
     ShowDetailResult (selection_text)
     

@@ -17,8 +17,6 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-
-
 Private Sub UserForm_Initialize()
     Me.StartUpPosition = 0 ' 手動位置指定
     Me.Top = 100           ' 上から100ピクセル
@@ -47,6 +45,13 @@ End Sub
 
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
-    Unload UserForm2
-    Unload UserForm3
+    if CloseMode = vbFormControlMenu Then
+        If MsgBox("閉じるともう一度カウントが必要になります。" & vbCr & "閉じてもよろしいですか？", vbCritical + vbYesNo, "動作確認") = vbYes Then
+            Unload UserForm2
+            Unload UserForm3
+            Cancel = False
+        Else
+            Cancel = True
+        End If
+    end if
 End Sub
