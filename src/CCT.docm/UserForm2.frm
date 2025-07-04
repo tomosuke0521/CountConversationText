@@ -18,33 +18,34 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub CommandButton1_Click()
+    Dim txt As String
     Dim pos As Long
-    Dim totalLen As Long
+    Dim startPos As Long, endPos As Long
     Dim result As String
 
-    TextBox1.SetFocus
-    DoEvents
+    ' テキストボックス内の全テキスト
+    txt = TextBox1.Text
+    ' カーソルの位置
+    pos = TextBox1.SelStart
 
-    With TextBox1
-        pos = .SelStart
-        totalLen = Len(.text)
+    ' 前の改行の位置を探す（最初からカーソルの位置まで）
+    startPos = InStrRev(txt, vbCrLf, pos)
+    If startPos = 0 Then
+        startPos = 1
+    Else
+        startPos = startPos + 2 ' 改行の直後
+    End If
 
-        ' 選択されてないなら強制的に10文字選択
-        If .SelLength = 0 Then
-            If pos >= totalLen Then
-                MsgBox "カーソルが末尾にあります。", vbExclamation
-                Exit Sub
-            End If
+    ' 次の改行の位置を探す（カーソル位置から後ろ）
+    endPos = InStr(pos + 1, txt, vbCrLf)
+    If endPos = 0 Then
+        endPos = Len(txt) + 1
+    End If
 
-            If totalLen - pos >= 10 Then
-                .SelLength = 10
-            Else
-                .SelLength = totalLen - pos
-            End If
-        End If
+    ' 該当行を抽出
+    result = Mid(txt, startPos, endPos - startPos)
 
-        result = .SelText
-    End With
+    MsgBox "現在の行のテキスト: " & vbCrLf & result
     
     result = Replace(result, vbCr, "^p")
     
