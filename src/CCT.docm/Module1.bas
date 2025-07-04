@@ -113,7 +113,6 @@ Sub CountCharactersInBrackets()
             "‰ï˜b•¶‚ÌŠ„‡: " & Format(Round(dialogue_count / all_text_count * 100, 2), "00.00") & "%" _
             , vbOKOnly, "ŒŸõŒ‹‰Ê"
     
-    
     ShowDetailResult (selection_text)
     
     Application.ScreenUpdating = False
