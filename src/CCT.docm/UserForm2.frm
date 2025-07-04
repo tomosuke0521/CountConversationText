@@ -19,33 +19,27 @@ Option Explicit
 
 Private Sub CommandButton1_Click()
     Dim txt As String
-    Dim pos As Long
-    Dim startPos As Long, endPos As Long
+    Dim selPos As Long
+    Dim lines() As String
+    Dim i As Long
+    Dim charIndex As Long
     Dim result As String
 
-    ' テキストボックス内の全テキスト
     txt = TextBox1.Text
-    ' カーソルの位置
-    pos = TextBox1.SelStart
+    selPos = TextBox1.SelStart
+    lines = Split(txt, vbCr)
 
-    ' 前の改行の位置を探す（最初からカーソルの位置まで）
-    startPos = InStrRev(txt, vbCrLf, pos)
-    If startPos = 0 Then
-        startPos = 1
-    Else
-        startPos = startPos + 2 ' 改行の直後
-    End If
+    charIndex = 0
+    For i = 0 To UBound(lines)
+        ' selPos がこの行の中にあるか？
+        If selPos >= charIndex And selPos <= charIndex + Len(lines(i)) Then
+            result = lines(i)
+            Exit For
+        End If
+        charIndex = charIndex + Len(lines(i)) + 2  ' vbCrLf = 2文字
+    Next i
 
-    ' 次の改行の位置を探す（カーソル位置から後ろ）
-    endPos = InStr(pos + 1, txt, vbCrLf)
-    If endPos = 0 Then
-        endPos = Len(txt) + 1
-    End If
-
-    ' 該当行を抽出
-    result = Mid(txt, startPos, endPos - startPos)
-
-    MsgBox "現在の行のテキスト: " & vbCrLf & result
+    MsgBox "カーソルがある行の内容：" & vbCrLf & result
     
     result = Replace(result, vbCr, "^p")
     
