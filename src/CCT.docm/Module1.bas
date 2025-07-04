@@ -5,7 +5,6 @@ Public SHOULD_STOP As Integer
 Public SHOULD_OPEN_UF As Integer
 Private non As Variant
 
-
 Private Function GetWithoutLB(ByVal inp_text As String) As Long
     Dim count_lb As Long
     count_lb = UBound(Split(inp_text, vbCr))
