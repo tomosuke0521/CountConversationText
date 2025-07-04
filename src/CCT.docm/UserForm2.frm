@@ -18,28 +18,33 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub CommandButton1_Click()
-    Dim txt As String
-    Dim selPos As Long
-    Dim lines() As String
-    Dim i As Long
-    Dim charIndex As Long
+    Dim pos As Long
+    Dim totalLen As Long
     Dim result As String
 
-    txt = TextBox1.Text
-    selPos = TextBox1.SelStart
-    lines = Split(txt, vbCr)
+    TextBox1.SetFocus
+    DoEvents
 
-    charIndex = 0
-    For i = 0 To UBound(lines)
-        ' selPos がこの行の中にあるか？
-        If selPos >= charIndex And selPos <= charIndex + Len(lines(i)) Then
-            result = lines(i)
-            Exit For
+    With TextBox1
+        pos = .SelStart
+        totalLen = Len(.text)
+
+        ' 選択されてないなら強制的に10文字選択
+        If .SelLength = 0 Then
+            If pos >= totalLen Then
+                MsgBox "カーソルが末尾にあります。", vbExclamation
+                Exit Sub
+            End If
+
+            If totalLen - pos >= 10 Then
+                .SelLength = 10
+            Else
+                .SelLength = totalLen - pos
+            End If
         End If
-        charIndex = charIndex + Len(lines(i)) + 2  ' vbCrLf = 2文字
-    Next i
 
-    MsgBox "カーソルがある行の内容：" & vbCrLf & result
+        result = .SelText
+    End With
     
     result = Replace(result, vbCr, "^p")
     
