@@ -17,6 +17,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+
 Private Sub CommandButton1_Click()
     Dim pos As Long
     Dim totalLen As Long
