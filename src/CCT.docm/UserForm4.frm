@@ -17,8 +17,6 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-
-
 Private Sub UserForm_Initialize()
     Me.StartUpPosition = 0 ' 手動位置指定
     Me.Top = 100           ' 上から100ピクセル

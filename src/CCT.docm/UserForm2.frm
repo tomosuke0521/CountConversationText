@@ -71,9 +71,6 @@ Private Sub CommandButton1_Click()
     
 End Sub
 
-
-
-
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
     if CloseMode = vbFormControlMenu Then
         Cancel = True
