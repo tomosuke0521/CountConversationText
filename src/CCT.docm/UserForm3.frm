@@ -35,15 +35,40 @@ Private Sub CommandButton1_Click()
                 MsgBox "カーソルが末尾にあります。", vbExclamation
                 Exit Sub
             End If
-
-            If totalLen - pos >= 10 Then
-                .SelLength = 10
-            Else
-                .SelLength = totalLen - pos
-            End If
+            
+            
+            Dim AfterPos As Long: AfterPos = pos
+            Dim PrePos As Long: PrePos = pos
+            Dim SelLen As Long: SelLen = 0
+            Do While SelLen < 300
+                DoEvents
+                .SelStart = PrePos
+                .SelLength = 1
+                If .SelText = vbCr And Not (SelLen = 0) Then
+                    AfterPos = PrePos + 1
+                    Do While SelLen < 600
+                        DoEvents
+                        .SelStart = AfterPos
+                        .SelLength = 1
+                        If .SelText = vbCr Then
+                            .SelStart = PrePos + 1
+                            .SelLength = AfterPos - PrePos - 1
+                            result = .SelText
+                            Exit Do
+                        End If
+                        AfterPos = AfterPos + 1
+                        SelLen = SelLen + 1
+                    Loop
+                    Exit Do
+                End If
+                
+                PrePos = PrePos - 1
+                SelLen = SelLen + 1
+            Loop
+            
+        Else
+            result = .SelText
         End If
-
-        result = .SelText
     End With
     
     result = Replace(result, vbCr, "^p")
@@ -62,10 +87,8 @@ Private Sub CommandButton1_Click()
             rng.Select
             ' 画面に表示されるようスクロール
             ActiveWindow.ScrollIntoView rng, True
-
             Me.Hide
             UserForm4.CheckBox2.Value = False
-        
         Else
             MsgBox "文字列「" & result & "」は本文内に見つかりませんでした。", vbInformation
         End If
