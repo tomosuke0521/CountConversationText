@@ -75,7 +75,9 @@ End Sub
 
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
-    Cancel = True
-    Me.Hide
-    UserForm4.CheckBox1.Value = False
+    if CloseMode = vbFormControlMenu Then
+        Cancel = True
+        Me.Hide
+        UserForm4.CheckBox1.Value = False
+    end if
 End Sub

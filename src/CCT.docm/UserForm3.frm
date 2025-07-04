@@ -62,19 +62,22 @@ Private Sub CommandButton1_Click()
             rng.Select
             ' 画面に表示されるようスクロール
             ActiveWindow.ScrollIntoView rng, True
+
+            Me.Hide
+            UserForm4.CheckBox2.Value = False
+        
         Else
             MsgBox "文字列「" & result & "」は本文内に見つかりませんでした。", vbInformation
         End If
     End With
     
-    Me.Hide
-    UserForm4.CheckBox2.Value = False
-    
 End Sub
 
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
-    Cancel = True
-    Me.Hide
-    UserForm4.CheckBox2.Value = False
+    if CloseMode = vbFormControlMenu Then
+        Cancel = True
+        Me.Hide
+        UserForm4.CheckBox2.Value = False
+    end if
 End Sub
