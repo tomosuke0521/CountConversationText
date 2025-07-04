@@ -62,6 +62,7 @@ Sub CountCharactersInBrackets()
         MsgBox "カウントする範囲を選択してください", vbExclamation + vbOKOnly, "エラー"
         Exit Sub
     End If
+
     
     Dim all_text_count As Long: all_text_count = GetWithoutLB(selection_text)
     
